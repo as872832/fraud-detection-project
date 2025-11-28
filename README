@@ -1,0 +1,259 @@
+# Rule-Based Fraudulent Transaction Pattern Analyzer
+
+**FinTech/RegTech Project**  
+**Team:** Mia Bruno & Ashley Brookman  
+**Course:** COP5818
+
+---
+
+##  Project Overview
+
+A transparent fraud detection system for credit card transactions using configurable rule-based algorithms instead of "black box" AI. Built with Python, this system provides explainable fraud detection suitable for regulatory compliance and user trust.
+
+**Key Features:**
+- 4 configurable fraud detection rules
+- 3 sensitivity modes (Strict, Moderate, Lenient)
+- SQLite database integration
+- 93.8% recall rate (catches almost all fraud)
+- CSV and JSON output formats
+- Comprehensive performance metrics
+
+---
+
+## ️ System Architecture
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Phase 1   │ →  │   Phase 2   │ →  │   Phase 3   │ →  │   Phase 4   │
+│    Data     │    │    Rule     │    │   Config    │    │  Detection  │
+│ Generation  │    │   Engine    │    │  Manager    │    │   System    │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+```
+
+---
+
+##  Quick Start
+
+### Prerequisites
+```bash
+Python 3.x
+pandas library
+```
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/as872832/fraud-detection-project.git
+cd fraud-detection-project
+
+# Install dependencies
+pip install pandas
+```
+
+### Running the System
+
+**Method 1: Python Command**
+```bash
+python src/detection_system.py
+```
+
+**Method 2: Batch File (Windows)**
+```bash
+run_phase4.bat
+```
+
+**With SQL Integration:**
+```bash
+python src/detection_system_with_db.py
+```
+
+---
+
+## Project Structure
+
+```
+fraud-detection-project/
+│
+├── src/
+│   ├── data_generator.py          # Phase 1: Generate synthetic transactions
+│   ├── rule_engine.py              # Phase 2: Fraud detection rules
+│   ├── config_manager.py           # Phase 3: Configuration management
+│   ├── detection_system.py         # Phase 4: Main detection system
+│   ├── database_manager.py         # SQL database integration
+│   ├── detection_system_with_db.py # Detection with SQL support
+│   └── sql_demo.py                 # SQL query demonstrations
+│
+├── data/
+│   └── transactions.csv            # Sample transaction data
+│
+├── config/
+│   ├── strict_config.json
+│   ├── moderate_config.json
+│   └── lenient_config.json
+│
+└── README.md
+```
+
+---
+
+##  Features
+
+### Four Detection Rules
+
+1. **High Frequency Detection**
+   - Detects rapid-fire transactions
+   - Configurable: Max transactions per time window
+
+2. **High Amount Detection**
+   - Flags unusually large purchases
+   - Two thresholds: Single transaction and daily cumulative
+
+3. **Impossible Travel Detection**
+   - Identifies geographically impossible transactions
+   - Uses Haversine formula for distance calculation
+
+4. **Unusual Time Detection**
+   - Flags transactions during odd hours
+   - Configurable time windows
+
+### Configuration Modes
+
+| Mode | Sensitivity | Use Case |
+|------|-------------|----------|
+| **Strict** | High | Catch everything, more false positives |
+| **Moderate** | Balanced | Standard operations |
+| **Lenient** | Low | Minimize false alarms, VIP customers |
+
+---
+
+##  Performance Metrics
+
+**Results with Moderate Configuration:**
+
+- Total Transactions Analyzed: 1,989
+- Flagged as Suspicious: 389 (19.6%)
+- **Accuracy:** 73.5%
+- **Precision:** 7.7%
+- **Recall:** 93.8% ← Catches almost all fraud!
+- **F1-Score:** 0.14
+
+**Configuration Comparison:**
+
+| Config | Flagged | Precision | Recall |
+|--------|---------|-----------|--------|
+| Strict | 555 (27.9%) | 5.4% | 93.8% |
+| Moderate | 389 (19.6%) | 7.7% | 93.8% |
+| Lenient | 213 (10.7%) | 14.1% | 93.8% |
+
+---
+
+## Database Integration
+
+**SQLite database with 3 tables:**
+
+1. `transactions` - All transaction data
+2. `detection_results` - Fraud flags and risk scores
+3. `config_history` - Performance tracking
+
+**Sample SQL Queries:**
+
+```sql
+-- Find all suspicious transactions
+SELECT * FROM transactions t
+JOIN detection_results dr ON t.transaction_id = dr.transaction_id
+WHERE dr.suspicious = 1;
+
+-- High-value transactions
+SELECT transaction_id, amount, merchant 
+FROM transactions 
+WHERE amount > 1000 
+ORDER BY amount DESC;
+
+-- Performance comparison
+SELECT config_name, precision, recall, accuracy 
+FROM config_history;
+```
+
+---
+
+## 🛠️ Technology Stack
+
+- **Language:** Python 3.x
+- **Data Processing:** pandas
+- **Database:** SQLite
+- **Storage:** CSV, JSON
+- **Version Control:** Git
+
+---
+
+##  Usage Examples
+
+### Generate Transaction Data
+```bash
+python src/data_generator.py
+```
+
+### Run Fraud Detection
+```bash
+python src/detection_system.py
+```
+
+### View SQL Queries
+```bash
+python src/sql_demo.py
+```
+
+### Custom Configuration
+```python
+from config_manager import ConfigurationManager
+from detection_system import FraudDetectionSystem
+
+# Load custom config
+system = FraudDetectionSystem()
+system.load_configuration('strict')
+results = system.run_full_detection()
+```
+
+---
+
+##  Project Context
+
+This project was developed as part of a FinTech course to demonstrate:
+- Rule-based fraud detection algorithms
+- Database design and SQL integration
+- Performance metrics and evaluation
+- Modular software architecture
+- Real-world applicability to financial systems
+
+---
+
+## 👥 Team
+
+- **Mia Bruno** - mi091463@ucf.edu
+- **Ashley Brookman** - as872832@ucf.edu
+
+---
+
+## 📄 License
+
+This project is for educational purposes.
+
+---
+
+## 🔮 Future Enhancements
+
+- Flask web interface for fraud analysts
+- Machine learning model comparison
+- Real-time streaming detection
+- Multi-user access control
+- Enhanced visualization dashboards
+
+---
+
+## 📞 Contact
+
+For questions about this project, please contact the team members via email.
+
+---
+
+**Built with transparency and explainability in mind for regulatory compliance and user trust.**
