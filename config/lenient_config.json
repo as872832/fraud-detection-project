@@ -1,0 +1,30 @@
+{
+    "name": "lenient",
+    "description": "Relaxed fraud detection - fewer false positives but may miss some fraud",
+    "created_date": "2025-11-25 16:18:19",
+    "rules": {
+        "frequency": {
+            "enabled": true,
+            "max_transactions": 10,
+            "time_window_minutes": 120,
+            "description": "Relaxed frequency limits"
+        },
+        "amount": {
+            "enabled": true,
+            "single_transaction_limit": 2000,
+            "daily_cumulative_limit": 5000,
+            "description": "Higher spending limits"
+        },
+        "travel": {
+            "enabled": true,
+            "max_speed_mph": 800,
+            "description": "Lenient travel speed threshold"
+        },
+        "time": {
+            "enabled": true,
+            "unusual_hours_start": 3,
+            "unusual_hours_end": 4,
+            "description": "Narrow unusual hours window"
+        }
+    }
+}

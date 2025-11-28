@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data - Fraud Detection System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-upload"></i> Upload Transaction Data</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="file" class="form-label">Select CSV File</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                        <div class="form-text">
+                            Upload a CSV file containing transaction data. Maximum file size: 16MB
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-info-circle"></i> Required Columns:</h6>
+                        <ul class="mb-0">
+                            <li><code>transaction_id</code> - Unique transaction identifier</li>
+                            <li><code>user_id</code> - User/customer identifier</li>
+                            <li><code>timestamp</code> - Date and time of transaction</li>
+                            <li><code>amount</code> - Transaction amount</li>
+                            <li><code>location</code> - Transaction location</li>
+                        </ul>
+                        <p class="mt-2 mb-0"><strong>Optional columns:</strong> <code>merchant</code>, <code>latitude</code>, <code>longitude</code></p>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-upload"></i> Upload and Process
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-spreadsheet"></i> Sample Data Format</h5>
+            </div>
+            <div class="card-body">
+                <p>Your CSV file should look like this:</p>
+                <pre class="bg-light p-3 rounded"><code>transaction_id,user_id,timestamp,amount,merchant,location,latitude,longitude
+TXN000001,USER0001,2025-11-20 14:30:00,45.99,Amazon.com,"New York, NY",40.7128,-74.0060
+TXN000002,USER0001,2025-11-20 15:45:00,12.50,Starbucks,"New York, NY",40.7128,-74.0060
+TXN000003,USER0002,2025-11-20 16:20:00,150.00,Walmart,"Los Angeles, CA",34.0522,-118.2437</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

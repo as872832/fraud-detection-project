@@ -1,0 +1,30 @@
+{
+    "name": "custom_example",
+    "description": "Example custom configuration with time rule disabled",
+    "created_date": "2025-11-25 16:18:19",
+    "rules": {
+        "frequency": {
+            "enabled": true,
+            "max_transactions": 7,
+            "time_window_minutes": 90,
+            "description": "Custom frequency settings"
+        },
+        "amount": {
+            "enabled": true,
+            "single_transaction_limit": 1500,
+            "daily_cumulative_limit": 4000,
+            "description": "Custom amount limits"
+        },
+        "travel": {
+            "enabled": true,
+            "max_speed_mph": 650,
+            "description": "Custom travel speed"
+        },
+        "time": {
+            "enabled": false,
+            "unusual_hours_start": 2,
+            "unusual_hours_end": 5,
+            "description": "Time rule disabled"
+        }
+    }
+}

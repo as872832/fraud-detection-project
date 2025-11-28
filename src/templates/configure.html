@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Configure - Fraud Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-gear"></i> Detection Configuration</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    Choose a detection configuration to balance between catching fraud and minimizing false alarms.
+                </p>
+                
+                <form method="POST">
+                    <div class="row">
+                        {% for config_name, config in configs.items() %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 {% if config_name == current_config %}border-primary{% endif %}">
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="config_name" 
+                                               id="config_{{ config_name }}" value="{{ config_name }}"
+                                               {% if config_name == current_config %}checked{% endif %}>
+                                        <label class="form-check-label" for="config_{{ config_name }}">
+                                            <h5>{{ config.name.title() }}</h5>
+                                        </label>
+                                    </div>
+                                    
+                                    <p class="text-muted small mt-2">{{ config.description }}</p>
+                                    
+                                    <hr>
+                                    
+                                    <h6 class="small">Rule Thresholds:</h6>
+                                    <ul class="small">
+                                        {% if 'frequency' in config.rules %}
+                                        <li><strong>Frequency:</strong> {{ config.rules.frequency.max_transactions }} txns in {{ config.rules.frequency.time_window_minutes }} min</li>
+                                        {% endif %}
+                                        {% if 'amount' in config.rules %}
+                                        <li><strong>Amount:</strong> ${{ config.rules.amount.single_transaction_limit }} single / ${{ config.rules.amount.daily_cumulative_limit }} daily</li>
+                                        {% endif %}
+                                        {% if 'travel' in config.rules %}
+                                        <li><strong>Travel:</strong> {{ config.rules.travel.max_speed_mph }} mph max</li>
+                                        {% endif %}
+                                        {% if 'time' in config.rules %}
+                                        <li><strong>Time:</strong> {{ config.rules.time.unusual_hours_start }}:00 - {{ config.rules.time.unusual_hours_end }}:00</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Apply Configuration
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Configuration Guide</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><span class="badge bg-danger">Strict</span></h6>
+                        <p class="small text-muted">
+                            <strong>Best for:</strong> High-risk environments, new customers, or when fraud cost is very high.
+                            <br><strong>Trade-off:</strong> Catches more fraud but generates more false alarms.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><span class="badge bg-warning">Moderate</span></h6>
+                        <p class="small text-muted">
+                            <strong>Best for:</strong> Standard operations with established customers.
+                            <br><strong>Trade-off:</strong> Balanced approach - good fraud detection with reasonable false alarm rate.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><span class="badge bg-success">Lenient</span></h6>
+                        <p class="small text-muted">
+                            <strong>Best for:</strong> VIP customers, business accounts, or when false alarms are costly.
+                            <br><strong>Trade-off:</strong> Fewer false alarms but may miss some fraud.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{
+    "name": "default",
+    "description": "Balanced fraud detection settings",
+    "created_date": "2025-11-25 16:18:19",
+    "rules": {
+        "frequency": {
+            "enabled": true,
+            "max_transactions": 5,
+            "time_window_minutes": 60,
+            "description": "Detects rapid-fire transaction patterns"
+        },
+        "amount": {
+            "enabled": true,
+            "single_transaction_limit": 1000,
+            "daily_cumulative_limit": 3000,
+            "description": "Flags unusually high spending amounts"
+        },
+        "travel": {
+            "enabled": true,
+            "max_speed_mph": 600,
+            "description": "Detects geographically impossible transactions"
+        },
+        "time": {
+            "enabled": true,
+            "unusual_hours_start": 2,
+            "unusual_hours_end": 5,
+            "description": "Flags transactions during unusual hours"
+        }
+    }
+}

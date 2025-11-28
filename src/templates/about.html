@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}About - Fraud Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-info-circle"></i> About the Fraud Detection System</h4>
+            </div>
+            <div class="card-body">
+                <h5>Project Overview</h5>
+                <p>
+                    This Rule-Based Fraudulent Transaction Pattern Analyzer is a transparent, explainable fraud detection 
+                    system designed for credit card transaction analysis. Unlike complex "black box" AI models, our system 
+                    uses simple, human-interpretable rules that can be easily understood and adjusted.
+                </p>
+                
+                <h5 class="mt-4">Key Features</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Transparent Detection:</strong> Every fraud flag includes a clear explanation</li>
+                            <li><strong>Configurable Rules:</strong> Adjust thresholds to match your risk tolerance</li>
+                            <li><strong>Real-time Analysis:</strong> Process transactions quickly and efficiently</li>
+                            <li><strong>Comprehensive Reports:</strong> Generate executive summaries and detailed analyses</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Performance Metrics:</strong> Track accuracy, precision, and recall</li>
+                            <li><strong>Multiple Configurations:</strong> Strict, Moderate, and Lenient presets</li>
+                            <li><strong>Web Interface:</strong> Easy-to-use dashboard for non-technical users</li>
+                            <li><strong>Export Capabilities:</strong> Download reports in multiple formats</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-shield-check"></i> Detection Rules</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="bi bi-clock-history"></i> High Frequency Detection</h6>
+                                <p class="small">
+                                    Flags transactions when too many occur within a short time window. 
+                                    Example: 5+ transactions in 60 minutes indicates possible card compromise.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="bi bi-currency-dollar"></i> High Amount Detection</h6>
+                                <p class="small">
+                                    Identifies unusually large purchases that exceed normal spending patterns. 
+                                    Checks both individual transactions and daily cumulative amounts.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="bi bi-geo-alt"></i> Impossible Travel Detection</h6>
+                                <p class="small">
+                                    Detects geographically impossible transactions using GPS coordinates and travel time. 
+                                    Example: Purchases in New York and Los Angeles 30 minutes apart.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="bi bi-moon"></i> Unusual Time Detection</h6>
+                                <p class="small">
+                                    Flags transactions during odd hours when most legitimate activity is unlikely. 
+                                    Default: 2 AM - 5 AM (adjustable by configuration).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-stack"></i> Technology Stack</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>Backend:</strong> Python, Flask</li>
+                    <li><strong>Data Processing:</strong> Pandas</li>
+                    <li><strong>Frontend:</strong> Bootstrap 5, HTML/CSS</li>
+                    <li><strong>Storage:</strong> CSV files, JSON configurations</li>
+                    <li><strong>Algorithms:</strong> Haversine formula for distance calculations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Project Team</h5>
+            </div>
+            <div class="card-body">
+                <h6>Developers:</h6>
+                <ul>
+                    <li>Mia Bruno - <code>mi091463@ucf.edu</code></li>
+                    <li>Ashley Brookman - <code>as872832@ucf.edu</code></li>
+                </ul>
+                
+                <h6 class="mt-3">Project Details:</h6>
+                <ul>
+                    <li><strong>Domain:</strong> RegTech / Payment Systems</li>
+                    <li><strong>Course:</strong> FinTech</li>
+                    <li><strong>Institution:</strong> University of Central Florida</li>
+                    <li><strong>Year:</strong> 2024</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-award"></i> Project Significance</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    This project demonstrates a proof-of-concept for fraud detection that emphasizes transparency 
+                    and effectiveness. Unlike neural networks and other "black box" AI models, our rule-based system 
+                    provides clear explanations for every detection, making it suitable for:
+                </p>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="bi bi-briefcase"></i> Regulatory Compliance</h6>
+                                <p class="small mb-0">
+                                    Transparent decision-making meets regulatory requirements for explainable AI 
+                                    in financial services.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="bi bi-person-check"></i> User Trust</h6>
+                                <p class="small mb-0">
+                                    Clear explanations help fraud analysts understand and validate detections, 
+                                    building trust in the system.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="bi bi-sliders"></i> System Tuning</h6>
+                                <p class="small mb-0">
+                                    Easy-to-adjust thresholds allow fine-tuning based on business needs 
+                                    and analyst feedback.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="mt-3 mb-0">
+                    <strong>Future Enhancements:</strong> This rule-based foundation can be augmented with machine learning 
+                    models while maintaining interpretability, creating a hybrid system that combines the best of both approaches.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

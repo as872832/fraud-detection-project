@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Fraud Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-house"></i> Dashboard</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Welcome to the Fraud Detection System</h5>
+                        <p class="text-muted">
+                            This system analyzes credit card transactions to detect fraudulent patterns using 
+                            transparent, rule-based detection methods.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>System Status</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Data Loaded
+                                {% if status.data_loaded %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>
+                                {% else %}
+                                    <span class="badge bg-secondary"><i class="bi bi-x-circle"></i> No</span>
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Configuration
+                                <span class="badge bg-primary">{{ status.config }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Detection Results
+                                {% if status.has_results %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Available</span>
+                                {% else %}
+                                    <span class="badge bg-secondary"><i class="bi bi-x-circle"></i> Not Run</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Step 1: Upload -->
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-upload" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h5 class="card-title">1. Upload Data</h5>
+                <p class="card-text text-muted">
+                    Upload your transaction data in CSV format.
+                </p>
+                {% if status.data_loaded %}
+                    <span class="badge bg-success mb-2">✓ {
+
+{ status.data_file }}</span>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{{ url_for('upload') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-upload"></i> Upload
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Configure -->
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-gear" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h5 class="card-title">2. Configure</h5>
+                <p class="card-text text-muted">
+                    Select detection rules and thresholds.
+                </p>
+                <span class="badge bg-primary mb-2">{{ status.config }}</span>
+                <div class="mt-3">
+                    <a href="{{ url_for('configure') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-gear"></i> Configure
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3: Detect -->
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-search" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h5 class="card-title">3. Detect Fraud</h5>
+                <p class="card-text text-muted">
+                    Run the fraud detection analysis.
+                </p>
+                {% if not status.data_loaded %}
+                    <span class="badge bg-warning mb-2">Upload data first</span>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{{ url_for('detect') }}" class="btn btn-primary btn-sm" 
+                       {% if not status.data_loaded %}disabled{% endif %}>
+                        <i class="bi bi-search"></i> Detect
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4: Results -->
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-bar-chart" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h5 class="card-title">4. View Results</h5>
+                <p class="card-text text-muted">
+                    Review detected fraud patterns.
+                </p>
+                {% if status.has_results %}
+                    <span class="badge bg-success mb-2">✓ Results Ready</span>
+                {% else %}
+                    <span class="badge bg-warning mb-2">Run detection first</span>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{{ url_for('results') }}" class="btn btn-primary btn-sm"
+                       {% if not status.has_results %}disabled{% endif %}>
+                        <i class="bi bi-bar-chart"></i> View
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Quick Start Guide</h5>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li><strong>Upload Transaction Data:</strong> Click "Upload Data" and select your CSV file containing transaction records.</li>
+                    <li><strong>Configure Rules:</strong> Choose a detection configuration (Strict, Moderate, or Lenient) or create a custom one.</li>
+                    <li><strong>Run Detection:</strong> Click "Detect Fraud" to analyze your transactions.</li>
+                    <li><strong>Review Results:</strong> View flagged transactions, statistics, and download detailed reports.</li>
+                </ol>
+                
+                <div class="alert alert-info mt-3">
+                    <i class="bi bi-info-circle"></i> <strong>Note:</strong> Your CSV file must include these columns: 
+                    <code>transaction_id</code>, <code>user_id</code>, <code>timestamp</code>, <code>amount</code>, <code>location</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="bi bi-shield-check"></i> Transparent Detection</h6>
+                <p class="text-muted small">Every fraud flag includes a clear explanation of which rule was violated.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="bi bi-sliders"></i> Configurable Rules</h6>
+                <p class="text-muted small">Adjust thresholds to match your risk tolerance and business needs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="bi bi-file-earmark-text"></i> Comprehensive Reports</h6>
+                <p class="text-muted small">Generate executive summaries, detailed reports, and statistical analyses.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

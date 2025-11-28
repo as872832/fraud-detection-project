@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}Results - Fraud Detection System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .transaction-card {
+        border-left: 4px solid;
+        margin-bottom: 1rem;
+    }
+    .risk-1 { border-left-color: #f59e0b; }
+    .risk-2 { border-left-color: #ef4444; }
+    .risk-3 { border-left-color: #dc2626; }
+    
+    .violation-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        margin: 0.25rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-bar-chart"></i> Detection Results - {{ config.title() }} Configuration</h4>
+            </div>
+            <div class="card-body">
+                <!-- Statistics Overview -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-value">{{ stats.total_transactions }}</div>
+                            <div class="stat-label">Total Transactions</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                            <div class="stat-value" style="-webkit-text-fill-color: white;">{{ stats.flagged_count }}</div>
+                            <div class="stat-label" style="color: rgba(255,255,255,0.9);">Flagged ({{ stats.flagged_percentage }}%)</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                            <div class="stat-value" style="-webkit-text-fill-color: white;">{{ stats.clean_count }}</div>
+                            <div class="stat-label" style="color: rgba(255,255,255,0.9);">Clean ({{ stats.clean_percentage }}%)</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+                            <div class="stat-value" style="-webkit-text-fill-color: white;">
+                                {% if stats.get('avg_risk_score') %}{{ stats.avg_risk_score }}{% else %}N/A{% endif %}
+                            </div>
+                            <div class="stat-label" style="color: rgba(255,255,255,0.9);">Avg Risk Score</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Metrics (if available) -->
+                {% if stats.get('ground_truth') %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h5>Performance Metrics</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h6>Accuracy</h6>
+                                        <h3>{{ (stats.ground_truth.accuracy * 100)|round(1) }}%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h6>Precision</h6>
+                                        <h3>{{ (stats.ground_truth.precision * 100)|round(1) }}%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h6>Recall</h6>
+                                        <h3>{{ (stats.ground_truth.recall * 100)|round(1) }}%</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <h6>F1-Score</h6>
+                                        <h3>{{ stats.ground_truth.f1_score|round(4) }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Violation Breakdown -->
+                {% if stats.get('violations_by_rule') %}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h5>Fraud Patterns Detected</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Violation Type</th>
+                                    <th>Count</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set total_violations = stats.violations_by_rule.values()|sum %}
+                                {% for rule, count in stats.violations_by_rule.items()|sort(attribute='1', reverse=True) %}
+                                <tr>
+                                    <td>{{ rule.replace('_', ' ').title() }}</td>
+                                    <td>{{ count }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar" role="progressbar" 
+                                                 style="width: {{ (count / total_violations * 100)|round(0) }}%">
+                                                {{ (count / total_violations * 100)|round(1) }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Download Reports -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h5><i class="bi bi-download"></i> Download Reports</h5>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('download_report', report_type='executive') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-file-text"></i> Executive Summary
+                            </a>
+                            <a href="{{ url_for('download_report', report_type='detailed') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-file-earmark-text"></i> Detailed Report
+                            </a>
+                            <a href="{{ url_for('download_report', report_type='statistics') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-graph-up"></i> Statistics
+                            </a>
+                            <a href="{{ url_for('download_report', report_type='html') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-filetype-html"></i> HTML Report
+                            </a>
+                            <a href="{{ url_for('download_report', report_type='csv') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-filetype-csv"></i> Flagged CSV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flagged Transactions -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Flagged Transactions (Top 50)</h5>
+            </div>
+            <div class="card-body">
+                {% if flagged_transactions %}
+                    {% for txn in flagged_transactions[:20] %}
+                    <div class="card transaction-card risk-{{ txn.risk_score }}">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6>
+                                        <strong>{{ txn.transaction_id }}</strong>
+                                        <span class="badge bg-danger">Risk: {{ txn.risk_score }}</span>
+                                    </h6>
+                                    <p class="mb-1">
+                                        <strong>User:</strong> {{ txn.user_id }} | 
+                                        <strong>Amount:</strong> ${{ "%.2f"|format(txn.amount) }} | 
+                                        <strong>Time:</strong> {{ txn.timestamp }}
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Merchant:</strong> {{ txn.merchant }} | 
+                                        <strong>Location:</strong> {{ txn.location }}
+                                    </p>
+                                    <div>
+                                        <strong>Violations:</strong>
+                                        {% for violation in txn.violations %}
+                                        <span class="violation-badge bg-warning text-dark">
+                                            [{{ violation.severity }}] {{ violation.rule }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <small class="text-muted">
+                                        {% for violation in txn.violations %}
+                                        <div>{{ violation.message }}</div>
+                                        {% endfor %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if flagged_transactions|length > 20 %}
+                    <div class="alert alert-info">
+                        Showing top 20 of {{ flagged_transactions|length }} flagged transactions. 
+                        Download the full report for complete details.
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> No suspicious transactions detected!
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
